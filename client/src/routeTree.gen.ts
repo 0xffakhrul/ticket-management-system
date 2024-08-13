@@ -15,7 +15,6 @@ import { Route as TicketsImport } from './routes/tickets'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as CreateImport } from './routes/create'
 import { Route as IndexImport } from './routes/index'
-import { Route as TicketsTicketIdImport } from './routes/tickets/$ticketId'
 import { Route as TicketTicketIdImport } from './routes/ticket.$ticketId'
 
 // Create/Update Routes
@@ -38,11 +37,6 @@ const CreateRoute = CreateImport.update({
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
-
-const TicketsTicketIdRoute = TicketsTicketIdImport.update({
-  path: '/$ticketId',
-  getParentRoute: () => TicketsRoute,
 } as any)
 
 const TicketTicketIdRoute = TicketTicketIdImport.update({
@@ -89,13 +83,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketTicketIdImport
       parentRoute: typeof rootRoute
     }
-    '/tickets/$ticketId': {
-      id: '/tickets/$ticketId'
-      path: '/$ticketId'
-      fullPath: '/tickets/$ticketId'
-      preLoaderRoute: typeof TicketsTicketIdImport
-      parentRoute: typeof TicketsImport
-    }
   }
 }
 
@@ -105,7 +92,7 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   CreateRoute,
   DashboardRoute,
-  TicketsRoute: TicketsRoute.addChildren({ TicketsTicketIdRoute }),
+  TicketsRoute,
   TicketTicketIdRoute,
 })
 
@@ -134,17 +121,10 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "dashboard.tsx"
     },
     "/tickets": {
-      "filePath": "tickets.tsx",
-      "children": [
-        "/tickets/$ticketId"
-      ]
+      "filePath": "tickets.tsx"
     },
     "/ticket/$ticketId": {
       "filePath": "ticket.$ticketId.tsx"
-    },
-    "/tickets/$ticketId": {
-      "filePath": "tickets/$ticketId.tsx",
-      "parent": "/tickets"
     }
   }
 }
