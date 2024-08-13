@@ -15,6 +15,8 @@ import { Route as TicketsImport } from './routes/tickets'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as CreateImport } from './routes/create'
 import { Route as IndexImport } from './routes/index'
+import { Route as TicketsTicketIdImport } from './routes/tickets/$ticketId'
+import { Route as TicketTicketIdImport } from './routes/ticket.$ticketId'
 
 // Create/Update Routes
 
@@ -35,6 +37,16 @@ const CreateRoute = CreateImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TicketsTicketIdRoute = TicketsTicketIdImport.update({
+  path: '/$ticketId',
+  getParentRoute: () => TicketsRoute,
+} as any)
+
+const TicketTicketIdRoute = TicketTicketIdImport.update({
+  path: '/ticket/$ticketId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -70,6 +82,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketsImport
       parentRoute: typeof rootRoute
     }
+    '/ticket/$ticketId': {
+      id: '/ticket/$ticketId'
+      path: '/ticket/$ticketId'
+      fullPath: '/ticket/$ticketId'
+      preLoaderRoute: typeof TicketTicketIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/tickets/$ticketId': {
+      id: '/tickets/$ticketId'
+      path: '/$ticketId'
+      fullPath: '/tickets/$ticketId'
+      preLoaderRoute: typeof TicketsTicketIdImport
+      parentRoute: typeof TicketsImport
+    }
   }
 }
 
@@ -79,7 +105,8 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   CreateRoute,
   DashboardRoute,
-  TicketsRoute,
+  TicketsRoute: TicketsRoute.addChildren({ TicketsTicketIdRoute }),
+  TicketTicketIdRoute,
 })
 
 /* prettier-ignore-end */
@@ -93,7 +120,8 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/create",
         "/dashboard",
-        "/tickets"
+        "/tickets",
+        "/ticket/$ticketId"
       ]
     },
     "/": {
@@ -106,7 +134,17 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "dashboard.tsx"
     },
     "/tickets": {
-      "filePath": "tickets.tsx"
+      "filePath": "tickets.tsx",
+      "children": [
+        "/tickets/$ticketId"
+      ]
+    },
+    "/ticket/$ticketId": {
+      "filePath": "ticket.$ticketId.tsx"
+    },
+    "/tickets/$ticketId": {
+      "filePath": "tickets/$ticketId.tsx",
+      "parent": "/tickets"
     }
   }
 }
