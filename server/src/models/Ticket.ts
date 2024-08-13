@@ -18,6 +18,10 @@ const ticketSchema = new Schema(
         date: { type: Date, required: Date.now },
       },
     ],
+    user: {
+      name: String,
+      imageUrl: String
+    }
   },
   { timestamps: true }
 );
