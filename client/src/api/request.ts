@@ -5,6 +5,7 @@ const BASE_URL = "http://localhost:6969/api/tickets";
 export interface Ticket {
   _id: string;
   subject: string;
+  userId: string;
   description: string;
   priority: string;
   status: string;
@@ -13,6 +14,11 @@ export interface Ticket {
     message: string;
     date: Date;
   }[];
+  createdAt: string;
+  user: {
+    name: string;
+    imageUrl: string;
+  };
 }
 
 export const getTickets = async (): Promise<Ticket[]> => {
@@ -26,7 +32,7 @@ export const getTicket = async (id: string): Promise<Ticket> => {
 };
 
 export const createTicket = async (
-  ticket: Omit<Ticket, "_id">
+  ticket: Omit<Ticket, "_id" | "createdAt">
 ): Promise<Ticket> => {
   const response = await axios.post(BASE_URL, ticket);
   return response.data;
