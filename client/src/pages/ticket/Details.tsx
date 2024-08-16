@@ -1,15 +1,21 @@
 import { format } from "date-fns";
-import { useCreateMessage, useTicket } from "../../api/ticket";
+import { useCreateMessage, useTicket, useUpdateTicket } from "../../api/ticket";
 import { Route } from "../../routes/ticket.$ticketId";
 import { useEffect, useState } from "react";
 import { cn } from "../../utils/cn";
+import { useUser } from "@clerk/clerk-react";
 
 export const Details = () => {
   const { ticketId } = Route.useParams();
   const { data: ticket, isLoading } = useTicket(ticketId);
   const [newMessage, setNewMessage] = useState("");
+  const [status, setStatus] = useState(ticket?.status ?? "");
+  const [priority, setPriority] = useState(ticket?.priority ?? "");
+
+  const { user } = useUser();
 
   const createMessage = useCreateMessage();
+  const updateTicket = useUpdateTicket();
 
   const handleCreateMessage = async () => {
     if (newMessage.trim() && ticket) {
@@ -18,6 +24,8 @@ export const Details = () => {
           ticketId: ticket._id,
           userId: ticket.userId,
           message: newMessage,
+          senderName: user?.fullName ?? "",
+          senderImageUrl: user?.imageUrl ?? "",
         },
         {
           onSuccess: () => {
@@ -28,6 +36,51 @@ export const Details = () => {
     }
   };
 
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
+    if (ticket) {
+      updateTicket.mutate(
+        { ...ticket, status: newStatus },
+        {
+          onSuccess: () => {
+            console.log("Status updated successfully");
+          },
+          onError: (error) => {
+            console.error("Error updating status:", error);
+            setStatus(ticket.status);
+          },
+        }
+      );
+    }
+  };
+
+  const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPriority = e.target.value;
+    setPriority(newPriority);
+    if (ticket) {
+      updateTicket.mutate(
+        { ...ticket, priority: newPriority },
+        {
+          onSuccess: () => {
+            console.log("Priority updated successfully");
+          },
+          onError: (error) => {
+            console.error("Error updating priority:", error);
+            setPriority(ticket.priority);
+          },
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (ticket) {
+      setStatus(ticket.status);
+      setPriority(ticket.priority);
+    }
+  }, [ticket]);
+
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -37,11 +90,11 @@ export const Details = () => {
   }, [isLoading, ticket]);
 
   const formattedDate = (date: string): string => {
-    return format(date, "dd/MM/yyyy");
+    return format(new Date(date), "cccc, dd/MM/yyyy");
   };
 
   const getTime = (time: string): string => {
-    return format(time, "h:mm a");
+    return format(new Date(time), "h:mm a");
   };
 
   return (
@@ -56,14 +109,25 @@ export const Details = () => {
         <div className="flex flex-col text-sm space-y-5">
           <div className="grid grid-cols-2 gap-4 ">
             <div className="shadow rounded-lg px-6 py-3 bg-white font-semibold text-base">
-              <p>Open</p>
+              <select
+                name="status"
+                id="status"
+                className="block w-full"
+                value={status}
+                onChange={handleStatusChange}
+              >
+                <option value="open">Open</option>
+                <option value="pending">Pending</option>
+                <option value="closed">Closed</option>
+              </select>
             </div>
             <div className="shadow rounded-lg px-6 py-3 bg-white font-semibold text-base">
               <select
-                name=""
-                id=""
+                name="priority"
+                id="priority"
                 className="block w-full"
-                value={ticket?.priority}
+                value={priority}
+                onChange={handlePriorityChange}
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -102,13 +166,15 @@ export const Details = () => {
                   className="flex items-center space-x-3 border-b pb-4"
                 >
                   <img
-                    src={ticket.user.imageUrl}
+                    src={message.sender.imageUrl}
                     alt="profile picture"
                     className="h-8 w-8 rounded-full"
                   />
                   <div>
                     <div className="flex">
-                      <p className="font-semibold pr-1">{message.senderId} </p>
+                      <p className="font-semibold pr-1">
+                        {message.sender.name}{" "}
+                      </p>
                       <p className="text-sm text-gray-500">
                         • {getTime(message.date.toString())}
                       </p>
