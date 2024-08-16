@@ -14,14 +14,15 @@ const ticketSchema = new Schema(
     messages: [
       {
         senderId: { type: String, required: true },
-        messages: { type: String, required: true },
+        sender: { name: String, imageUrl: String },
+        message: { type: String, required: true },
         date: { type: Date, required: Date.now },
       },
     ],
     user: {
       name: String,
-      imageUrl: String
-    }
+      imageUrl: String,
+    },
   },
   { timestamps: true }
 );
