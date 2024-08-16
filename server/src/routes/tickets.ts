@@ -40,8 +40,17 @@ router.post("/", async (req: Request, res: Response) => {
 
 router.put("/:id", async (req: Request, res: Response) => {
   try {
-    const { subject, description, priority, status, newMessage, userId } =
-      req.body;
+    const {
+      subject,
+      description,
+      priority,
+      status,
+      newMessage,
+      userId,
+      senderName,
+      senderImageUrl,
+    } = req.body;
+    req.body;
     const update: any = { $set: {} };
 
     if (subject) update.$set.subject = subject;
@@ -53,11 +62,35 @@ router.put("/:id", async (req: Request, res: Response) => {
       update.$push = {
         messages: {
           senderId: userId,
-          messages: newMessage,
+          sender: { name: senderName, imageUrl: senderImageUrl },
+          message: newMessage,
           date: new Date(),
         },
       };
     }
+
+    const ticket = await Ticket.findByIdAndUpdate(req.params.id, update, {
+      new: true,
+    });
+
+    if (!ticket) {
+      return res.status(404).send({ message: "Ticket not found" });
+    }
+
+    res.status(200).send(ticket);
+  } catch (error) {
+    console.error("Error updating ticket:", error);
+    res.status(500).send({ message: "Error updating ticket" });
+  }
+});
+
+router.patch("/:id", async (req: Request, res: Response) => {
+  try {
+    const { status, priority } = req.body;
+    const update: any = {};
+
+    if (status) update.status = status;
+    if (priority) update.priority = priority;
 
     const ticket = await Ticket.findByIdAndUpdate(req.params.id, update, {
       new: true,
