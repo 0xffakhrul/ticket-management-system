@@ -2,7 +2,14 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    // colors: {
+    //   accent: "#9be718",
+    // },
+    extend: {
+      colors: {
+        accent: "#9be718",
+      },
+    },
   },
   plugins: [],
 };

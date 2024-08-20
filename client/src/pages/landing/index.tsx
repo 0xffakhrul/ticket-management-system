@@ -9,9 +9,9 @@ export const Landing = () => {
         seamless communication, all in one place. Say goodbye to chaos and hello
         to organized productivity.
       </p>
-      <button className="rounded-full bg-black text-white px-4 py-2 max-w-36 mx-auto">
+      <button className="rounded-full bg-black text-white px-4 py-2 mx-auto">
         Start Ticketing
       </button>
     </div>
-  ); 
+  );
 };
