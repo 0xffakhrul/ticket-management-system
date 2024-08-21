@@ -24,7 +24,6 @@ if (!PUBLISHABLE_KEY) {
 
 const queryClient = new QueryClient();
 
-// Create a new component to wrap everything
 const Root = () => (
   <React.StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>

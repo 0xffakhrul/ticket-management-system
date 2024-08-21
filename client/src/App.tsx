@@ -1,8 +1,6 @@
 import {
-  SignedIn,
   SignedOut,
   SignInButton,
-  UserButton,
 } from "@clerk/clerk-react";
 import { Toaster } from "react-hot-toast";
 
@@ -12,9 +10,6 @@ function App() {
       <SignedOut>
         <SignInButton />
       </SignedOut>
-      {/* <SignedIn>
-        <UserButton />
-      </SignedIn> */}
       <Toaster />
     </div>
   );

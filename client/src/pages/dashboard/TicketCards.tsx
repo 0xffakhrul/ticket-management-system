@@ -2,7 +2,7 @@ import { CircleCheckBig, Clock, FolderOpen, Layers } from "lucide-react";
 import { useTickets } from "../../api/ticket";
 
 export const TicketCards = () => {
-  const { data: tickets, isLoading, error } = useTickets();
+  const { data: tickets } = useTickets();
 
   const openTickets =
     tickets?.filter((ticket) => ticket.status === "open").length || 0;

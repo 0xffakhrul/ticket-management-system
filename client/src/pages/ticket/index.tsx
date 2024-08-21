@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import Table from "../../components/Table";
 
 export const Ticket = () => {
-  const { data: tickets = [], isLoading, error } = useTickets();
+  const { data: tickets = [], isLoading } = useTickets();
   const navigate = useNavigate();
 
   const handleNavigateTicket = (ticketId: string) => {
