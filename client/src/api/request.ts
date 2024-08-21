@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://ticket-management-system-0sp7.onrender.com";
+const BASE_URL = "https://ticket-management-system-0sp7.onrender.com/api/tickets";
 
 export interface Ticket {
   _id: string;
