@@ -4,6 +4,7 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/clerk-react";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       {/* <SignedIn>
         <UserButton />
       </SignedIn> */}
+      <Toaster />
     </div>
   );
 }
