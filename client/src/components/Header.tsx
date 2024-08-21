@@ -61,7 +61,16 @@ const Header = () => {
               {isMenuOpen ? (
                 <X className="w-6 h-6" />
               ) : (
-                <Menu className="w-6 h-6" />
+                <>
+                  <SignedIn>
+                    <Menu className="w-6 h-6" />
+                  </SignedIn>
+                  <SignedOut>
+                    <div className="rounded-full border border-accent px-4 py-2 text-accent">
+                      <SignInButton />
+                    </div>
+                  </SignedOut>
+                </>
               )}
             </button>
           </div>
