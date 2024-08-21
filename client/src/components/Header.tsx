@@ -1,4 +1,9 @@
-import { UserButton } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
 import { Link, Outlet } from "@tanstack/react-router";
 import { TicketPercent, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -31,18 +36,25 @@ const Header = () => {
             </Link>
           </div>
           <div className="hidden md:flex space-x-8 items-center">
-            <Link to="/dashboard" className="text-white font-bold">
-              Dashboard
-            </Link>
-            <Link to="/tickets" className="text-white font-bold">
-              Tickets
-            </Link>
-            <Link to="/create" className="text-white font-bold">
-              <button className="rounded-full border border-accent px-4 py-2 text-accent">
-                + New Ticket
-              </button>
-            </Link>
-            <UserButton />
+            <SignedIn>
+              <Link to="/dashboard" className="text-white font-bold">
+                Dashboard
+              </Link>
+              <Link to="/tickets" className="text-white font-bold">
+                Tickets
+              </Link>
+              <Link to="/create" className="text-white font-bold">
+                <button className="rounded-full border border-accent px-4 py-2 text-accent">
+                  + New Ticket
+                </button>
+              </Link>
+              <UserButton />
+            </SignedIn>
+            <SignedOut>
+              <div className="rounded-full border border-accent px-4 py-2 text-accent">
+                <SignInButton />
+              </div>
+            </SignedOut>
           </div>
           <div className="md:hidden flex items-center">
             <button onClick={toggleMenu} className="text-white">
@@ -91,7 +103,12 @@ const Header = () => {
               </button>
             </Link>
             <div className="flex justify-center">
-              <UserButton />
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
             </div>
           </div>
         </div>
