@@ -11,6 +11,7 @@ export interface Ticket {
   status: string;
   messages: {
     senderId: string;
+    sender: { name: string; imageUrl: string };
     message: string;
     date: Date;
   }[];
@@ -35,5 +36,29 @@ export const createTicket = async (
   ticket: Omit<Ticket, "_id" | "createdAt">
 ): Promise<Ticket> => {
   const response = await axios.post(BASE_URL, ticket);
+  return response.data;
+};
+
+export const createMessage = async (
+  ticketId: string,
+  userId: string,
+  message: string,
+  senderName: string,
+  senderImageUrl: string
+): Promise<Ticket> => {
+  const response = await axios.put(`${BASE_URL}/${ticketId}`, {
+    newMessage: message,
+    userId: userId,
+    senderName: senderName,
+    senderImageUrl: senderImageUrl,
+  });
+  return response.data;
+};
+
+export const updateTicket = async (ticket: Ticket): Promise<Ticket> => {
+  const response = await axios.patch<Ticket>(
+    `${BASE_URL}/${ticket._id}`,
+    ticket
+  );
   return response.data;
 };
