@@ -1,5 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createTicket, getTicket, getTickets, Ticket } from "./request";
+import {
+  createMessage,
+  createTicket,
+  getTicket,
+  getTickets,
+  Ticket,
+  updateTicket,
+} from "./request";
 
 export const useTickets = () => {
   return useQuery<Ticket[], Error>({
@@ -23,6 +30,45 @@ export const useCreateTicket = () => {
     mutationFn: createTicket,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tickets"] });
+    },
+  });
+};
+
+export const useCreateMessage = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      ticketId,
+      userId,
+      message,
+      senderName,
+      senderImageUrl,
+    }: {
+      ticketId: string;
+      userId: string;
+      message: string;
+      senderName: string;
+      senderImageUrl: string;
+    }) => createMessage(ticketId, userId, message, senderName, senderImageUrl),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["ticket", variables.ticketId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["tickets"] });
+    },
+  });
+};
+
+export const useUpdateTicket = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateTicket,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["tickets", variables._id],
+      });
     },
   });
 };
