@@ -14,7 +14,7 @@ export const TicketCards = () => {
     tickets?.filter((ticket) => ticket.status === "closed").length || 0;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-5">
       <div className="text-white bg-zinc-800 rounded-md px-10 py-8 flex items-center gap-4">
         <div className="rounded-full bg-blue-300 p-3">
           <Layers className="w-8 h-8 text-gray-700" />
