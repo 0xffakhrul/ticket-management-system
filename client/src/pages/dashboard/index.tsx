@@ -23,10 +23,10 @@ export const Dashboard = () => {
       <div className="bg-black">
         <div className="w-11/12 max-w-6xl mx-auto">
           <h1 className="text-white font-bold text-2xl py-4">Dashboard</h1>
-          <TicketCards />
+          {isLoading ? <p className="text-white pb-4">Loading tickets...</p> : <TicketCards />}
         </div>
       </div>
-      <div className="w-11/12 max-w-6xl mx-auto">
+      <div className="w-11/12 max-w-6xl mx-auto my-4">
         <h2 className="font-bold text-xl mt-6 mb-4">Recent Tickets</h2>
         {isLoading ? (
           <p>Loading tickets...</p>
