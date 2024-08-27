@@ -52,7 +52,7 @@ const Header = () => {
             </SignedIn>
             <SignedOut>
               <div className="rounded-full border border-accent px-4 py-2 text-accent">
-                <SignInButton />
+                <SignInButton mode="modal" />
               </div>
             </SignedOut>
           </div>
@@ -67,7 +67,7 @@ const Header = () => {
                   </SignedIn>
                   <SignedOut>
                     <div className="rounded-full border border-accent px-4 py-2 text-accent">
-                      <SignInButton />
+                      <SignInButton mode="modal" />
                     </div>
                   </SignedOut>
                 </>
